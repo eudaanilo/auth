@@ -18,7 +18,11 @@ export default function Login() {
         const errorMessage = error.message;
         console.log(errorCode);
         console.log(errorMessage);
-        Alert.alert("Erro", "Não foi possível se conectar com essas credenciais")
+        if((username.length) === 0){
+            Alert.alert("Não há dados", "Não foram inseridos dados para autenticação")
+        }else{
+            Alert.alert("Não há usuário", "Não foram identificados usuários com essas credeciais")
+        }
       })
       .finally(() => {
         setTimeout(() => {
