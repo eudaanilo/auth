@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   forgotPassword: {
-    textAlign: 'right',
+    textAlign: 'center',
     marginBottom: 10,
     color: 'blue',
   },
