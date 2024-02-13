@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { Button, StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import firebaseAuth from '../firebase/config';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -18,6 +18,7 @@ export default function Login() {
         const errorMessage = error.message;
         console.log(errorCode);
         console.log(errorMessage);
+        Alert.alert("Erro", "Não foi possível se conectar com essas credenciais")
       })
       .finally(() => {
         setTimeout(() => {
@@ -81,6 +82,6 @@ const styles = StyleSheet.create({
     color: 'blue',
   },
   spinnerText: {
-    color: 'black',
+    color: '#ffff',
   },
 });
