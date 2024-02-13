@@ -6,6 +6,7 @@ import firebaseAuth from "./src/firebase/config";
 import Home from "./src/views/Home";
 import Login from "./src/views/Login";
 
+
 export default function App() {
 
   const [user, setUser] = useState();
