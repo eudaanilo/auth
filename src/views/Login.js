@@ -4,7 +4,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import firebaseAuth from '../firebase/config';
 import Spinner from 'react-native-loading-spinner-overlay';
 
-export default function Login() {
+export default function Login({ navigation }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -21,7 +21,7 @@ export default function Login() {
         if((username.length) === 0){
             Alert.alert("Não há dados", "Não foram inseridos dados para autenticação")
         }else{
-            Alert.alert("Não há usuário", "Não foram identificados usuários com essas credeciais")
+            Alert.alert("Usuário não cadastrado", "Não existe nenhum usuário com o e-mail informado.")
         }
       })
       .finally(() => {
@@ -29,6 +29,10 @@ export default function Login() {
           setLoading(false);
         }, 3000);
       });
+  };
+
+  const navigateToSignup = () => {
+    navigation.navigate('Signup');
   };
 
   return (
@@ -51,6 +55,7 @@ export default function Login() {
           <Text style={styles.forgotPassword}>Esqueci a Senha</Text>
         </TouchableOpacity>
         <Button title="Entrar" onPress={() => doLogin()} />
+        <Button title="Cadastrar" onPress= { () => Sign()} />
         <Spinner
           visible={loading}
           textContent={'Conectando...'}

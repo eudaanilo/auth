@@ -5,6 +5,7 @@ import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import firebaseAuth from "./src/firebase/config";
 import Home from "./src/views/Home";
 import Login from "./src/views/Login";
+import Sign from "./src/views/Sign";
 
 
 export default function App() {
@@ -16,10 +17,21 @@ export default function App() {
       setUser(user);
     });
   }, []);
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(firebaseAuth, (user) => {
+      setUser(user);
+    });
+    return () => unsubscribe(); // Limpar o listener quando o componente for desmontado
+  }, []);
 
   if (user) {
-    return <Home></Home>;
+    return <Home />;
+  } else {
+    return <Login />;
   }
 
-  return <Login></Login>;
+    
+  return <Sign></Sign>
+
+  
 }
