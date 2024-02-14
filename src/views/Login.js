@@ -23,9 +23,15 @@ export default function Login() {
         console.log(errorCode);
         console.log(errorMessage);
         if((username.length) === 0){
-            Alert.alert("Não há dados", "Não foram inseridos dados para autenticação")
+          setLoading(true);
+          Alert.alert("Não há dados", "Não foram inseridos dados para autenticação");
+          setLoading(false);
         }else{
-            Alert.alert("Usuário não cadastrado", "Não existe nenhum usuário com o e-mail informado.")
+          setLoading(true);
+          Alert.alert("Usuário não cadastrado", "Não existe nenhum usuário com o e-mail informado.");
+          setLoading(false);
+          setUsername(''); // Limpa o campo de usuário
+          setPassword(''); // Limpa o campo de senha
         }
       })
       .finally(() => {
