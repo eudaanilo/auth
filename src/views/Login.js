@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import { Button, StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import firebaseAuth from '../firebase/config';
 import Spinner from 'react-native-loading-spinner-overlay';
+import Cadastro from './Cadastro';
+import react from 'react';
 
-export default function Login({ navigation }) {
+export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -31,9 +35,14 @@ export default function Login({ navigation }) {
       });
   };
 
-  const navigateToSignup = () => {
-    navigation.navigate('Signup');
-  };
+  // function GoToButton({ navigation, Cadastro }) {
+  //   return (
+  //     <Button
+  //       title={`Go to ${Cadastro}`}
+  //       onPress={() => navigation.navigate(Cadastro)}
+  //     />
+  //   );
+  // }
 
   return (
     <View style={styles.container}>
@@ -55,7 +64,7 @@ export default function Login({ navigation }) {
           <Text style={styles.forgotPassword}>Esqueci a Senha</Text>
         </TouchableOpacity>
         <Button title="Entrar" onPress={() => doLogin()} />
-        <Button title="Cadastrar" onPress= { () => Sign()} />
+        <Button title="Se cadastrar" onPress= { () => navigation.navigate('Cadastro')} />
         <Spinner
           visible={loading}
           textContent={'Conectando...'}

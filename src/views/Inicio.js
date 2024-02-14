@@ -2,10 +2,10 @@ import { Button, StyleSheet, Text, View } from "react-native";
 import firebaseAuth from "../firebase/config";
 import { signOut } from "firebase/auth";
 
-export default function SignUp() {
+export default function Inicio() {
     return (
         <View style={styles.container}>
-            <Text>Tela de Cadastro!</Text>
+            <Text>Tela de Home!</Text>
             <Button title="Sair" onPress={() => { signOut(firebaseAuth) }}></Button>
         </View>
     )

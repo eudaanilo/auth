@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import firebaseAuth from "./src/firebase/config";
-import Home from "./src/views/Home";
+import Inicio from "./src/views/Inicio";
 import Login from "./src/views/Login";
-import Sign from "./src/views/Sign";
+import Cadastro from "./src/views/Cadastro";
 
 
 export default function App() {
@@ -25,13 +25,11 @@ export default function App() {
   }, []);
 
   if (user) {
-    return <Home />;
-  } else {
-    return <Login />;
-  }
+    return <Inicio></Inicio>;
+  } 
 
     
-  return <Sign></Sign>
+  return <Login></Login>
 
   
 }
