@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { Button, StyleSheet, Text, View, Image, TouchableOpacity, Animated } from 'react-native';
+import { Button, StyleSheet, Text, View, Image, TouchableOpacity, Animated, Alert } from 'react-native';
 import firebaseAuth from '../firebase/config';
 import { signOut } from 'firebase/auth';
+import ImagePicker from 'react-native-image-picker';
 
 export default function Inicio() {
     const [menuVisible, setMenuVisible] = useState(false);
     const fadeAnim = useState(new Animated.Value(0))[0];
+    const [darkMode, setDarkMode] = useState(false);
 
     const toggleMenu = () => {
         if (menuVisible) {
@@ -25,11 +27,13 @@ export default function Inicio() {
     };
 
     const handleProfileInfo = () => {
-        // Implementação da função handleProfileInfo
+        Alert.alert('Configurações', 'Configurações da conta');
+        toggleMenu();
     };
 
     const handleDarkMode = () => {
-        // Implementação da função handleDarkMode
+        setDarkMode(!darkMode);
+        toggleMenu();
     };
 
     const handleSettings = () => {
@@ -37,11 +41,38 @@ export default function Inicio() {
     };
 
     const handleLogout = () => {
-        // Implementação da função handleLogout
+        signOut(firebaseAuth);
     };
 
+    const handleChangeProfilePic = () => {
+        const options = {
+            title: 'Selecionar Foto de Perfil',
+            storageOptions: {
+                skipBackup: true,
+                path: 'images',
+            },
+        };
+
+        ImagePicker.showImagePicker(options, (response) => {
+            if (response.didCancel) {
+                console.log('Usuário cancelou a seleção de imagem');
+            } else if (response.error) {
+                console.log('Erro ao selecionar imagem:', response.error);
+            } else {
+                // Aqui você pode fazer o upload da imagem para o servidor ou salvar localmente
+                console.log('Caminho da imagem:', response.uri);
+            }
+        });
+
+        toggleMenu();
+    };
+
+
+
+
+
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, darkMode && styles.darkMode]}>
             <View style={styles.header}>
                 <TouchableOpacity onPress={toggleMenu}>
                     <Image
@@ -49,13 +80,15 @@ export default function Inicio() {
                         style={styles.profilePic}
                     />
                 </TouchableOpacity>
-                {/* Menu suspenso */}
                 <Animated.View style={[styles.menu, { opacity: fadeAnim }]}>
                     <TouchableOpacity style={styles.menuItem} onPress={handleProfileInfo}>
                         <Text>Informações do Perfil</Text>
                     </TouchableOpacity>
+                    <TouchableOpacity style={styles.menuItem} onPress={handleChangeProfilePic}>
+                        <Text>Mudar foto de perfil</Text>
+                    </TouchableOpacity>
                     <TouchableOpacity style={styles.menuItem} onPress={handleDarkMode}>
-                        <Text>Modo Escuro</Text>
+                        <Text>{darkMode ? 'Modo Escuro' : 'Modo Claro'}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.menuItem} onPress={handleSettings}>
                         <Text>Configurações</Text>
@@ -66,7 +99,7 @@ export default function Inicio() {
                 </Animated.View>
             </View>
             <Text style={styles.title}>Tela de Início!</Text>
-            <Button title="Sair" onPress={handleLogout} />
+            {/* <Button title="Sair" onPress={handleLogout} /> */}
         </View>
     );
 }
@@ -78,13 +111,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    darkMode: {
+        backgroundColor: '#fff',
+    },
     header: {
         position: 'absolute',
         top: 0,
         left: 0,
         right: 0,
         height: 60,
-        backgroundColor: '#fff',
         flexDirection: 'row',
         justifyContent: 'flex-end',
         alignItems: 'center',
