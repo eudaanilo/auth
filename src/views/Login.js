@@ -68,7 +68,7 @@ export default function Login() {
           <Text style={styles.forgotPassword}>Esqueci a Senha</Text>
         </TouchableOpacity>
         <Button title="Entrar" onPress={() => doLogin()} />
-        <Button title="Se cadastrar" onPress= { () => navigation.navigate('Cadastro')} />
+        <Button title="Cadastre-se" onPress= { () => navigation.navigate('Cadastro')} />
         <Spinner
           visible={loading}
           textContent={'Conectando...'}
