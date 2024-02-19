@@ -68,15 +68,12 @@ export default function Inicio() {
     };
 
 
-
-
-
     return (
         <View style={[styles.container, darkMode && styles.darkMode]}>
             <View style={styles.header}>
                 <TouchableOpacity onPress={toggleMenu}>
                     <Image
-                        source={require('../img/profilephoto.jpg')} // Substitua pelo caminho da imagem de perfil
+                        source={require('../img/profilephoto.jpg')}
                         style={styles.profilePic}
                     />
                 </TouchableOpacity>
@@ -85,7 +82,7 @@ export default function Inicio() {
                         <Text>Informações do Perfil</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.menuItem} onPress={handleChangeProfilePic}>
-                        <Text>Mudar foto de perfil</Text>
+                        <Text>Mudar foto</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.menuItem} onPress={handleDarkMode}>
                         <Text>{darkMode ? 'Modo Escuro' : 'Modo Claro'}</Text>
@@ -116,7 +113,7 @@ const styles = StyleSheet.create({
     },
     header: {
         position: 'absolute',
-        top: 0,
+        top: 20,
         left: 0,
         right: 0,
         height: 60,
