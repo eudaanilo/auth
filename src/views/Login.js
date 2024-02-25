@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { Button, StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { sendPasswordResetEmail } from 'firebase/auth';
 import firebaseAuth from '../firebase/config';
 import Spinner from 'react-native-loading-spinner-overlay';
-import Cadastro from './Cadastro';
-import react from 'react';
+
+
 
 export default function Login() {
   const [username, setUsername] = useState('');
@@ -59,6 +57,18 @@ export default function Login() {
       setLoading(false);
     }
   };
+  const handleSignUp = async () => {
+    try {
+      setLoading(true);
+      await createUserWithEmailAndPassword(firebaseAuth, username, password);
+      Alert.alert('Cadastro realizado com sucesso', 'Você foi cadastrado com sucesso! Por favor, faça login para continuar.');
+    } catch (error) {
+      console.error('Erro ao cadastrar usuário:', error);
+      Alert.alert('Erro ao cadastrar', 'Ocorreu um erro ao cadastrar usuário. Por favor, tente novamente.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -80,7 +90,7 @@ export default function Login() {
           <Text style={styles.forgotPassword}>Esqueci a Senha</Text>
         </TouchableOpacity>
         <Button title="Entrar" onPress={() => doLogin()} />
-        <Button title="Cadastre-se" onPress= { () => navigation.navigate('Cadastro')} />
+        <Button title="Cadastre-se" onPress={handleSignUp} />
         <Spinner
           visible={loading}
           textContent={'Conectando...'}
