@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, StyleSheet, Text, View, Image, TouchableOpacity, Animated, Alert } from 'react-native';
 import firebaseAuth from '../firebase/config';
-import { signOut } from 'firebase/auth';
+import { signOut, sendPasswordResetEmail } from 'firebase/auth';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 
@@ -53,33 +53,46 @@ export default function Inicio() {
             Alert.alert('Permissão negada', 'Você precisa conceder permissão para acessar a biblioteca de mídia.');
             return;
         }
-    
+
         const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
             aspect: [1, 1],
             quality: 1,
         });
-    
-        if (!result.cancelled) {
-            try {
-                const fileName = result.uri.split('/').pop();
-                const newPath = FileSystem.documentDirectory + fileName;
-                await FileSystem.moveAsync({
-                    from: result.uri,
-                    to: newPath,
-                });
-                setProfilePicUri(newPath);
-            } catch (error) {
-                console.error('Erro ao salvar a imagem:', error);
-            }
-        } else {
+
+        if (result.cancelled) {
             console.log('Seleção de imagem cancelada.');
+            return;
         }
-    
+
+        try {
+            const fileName = result.uri.split('/').pop();
+            const newPath = FileSystem.documentDirectory + fileName;
+            await FileSystem.moveAsync({
+                from: result.uri,
+                to: newPath,
+            });
+            setProfilePicUri(newPath);
+        } catch (error) {
+            console.error('Erro ao salvar a imagem:', error);
+        }
+
         toggleMenu();
     };
-    
+
+    const handleForgotPassword = async () => {
+        console.log('Botão de Esqueci a Senha clicado!');
+        const email = firebaseAuth.currentUser.email;
+        try {
+            await sendPasswordResetEmail(firebaseAuth, email);
+            Alert.alert('E-mail de redefinição enviado', 'Por favor, verifique sua caixa de entrada para redefinir sua senha.');
+        } catch (error) {
+            console.error('Erro ao enviar e-mail de redefinição:', error);
+            Alert.alert('Erro', 'Ocorreu um erro ao enviar o e-mail de redefinição. Por favor, tente novamente mais tarde.');
+        }
+        toggleMenu();
+    };
 
     return (
         <View style={[styles.container, darkMode && styles.darkMode]}>
@@ -102,6 +115,9 @@ export default function Inicio() {
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.menuItem} onPress={handleSettings}>
                         <Text>Configurações</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.menuItem} onPress={handleForgotPassword}>
+                        <Text>Esqueci a Senha</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.menuItem} onPress={handleLogout}>
                         <Text>Sair</Text>
@@ -130,7 +146,6 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         height: 60,
-        backgroundColor: '#fff',
         flexDirection: 'row',
         justifyContent: 'flex-end',
         alignItems: 'center',
@@ -161,10 +176,3 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
 });
-
-
-
-
-
-
-//'../img/profilephoto.jpg'

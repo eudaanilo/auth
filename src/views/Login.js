@@ -3,6 +3,7 @@ import { Button, StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } fr
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { sendPasswordResetEmail } from 'firebase/auth';
 import firebaseAuth from '../firebase/config';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Cadastro from './Cadastro';
@@ -39,14 +40,25 @@ export default function Login() {
       });
   };
 
-  // function GoToButton({ navigation, Cadastro }) {
-  //   return (
-  //     <Button
-  //       title={`Go to ${Cadastro}`}
-  //       onPress={() => navigation.navigate(Cadastro)}
-  //     />
-  //   );
-  // }
+  const handleForgotPassword = async () => {
+    try {
+      if (!username) {
+        Alert.alert("Campo de E-mail vazio", "Por favor, insira seu e-mail para redefinir a senha.");
+        return;
+      }
+
+      setLoading(true);
+
+      await sendPasswordResetEmail(firebaseAuth, username);
+
+      Alert.alert("E-mail de Redefinição Enviado", "Um e-mail de redefinição de senha foi enviado para o endereço fornecido.");
+    } catch (error) {
+      console.error('Erro ao enviar e-mail de redefinição de senha:', error);
+      Alert.alert("Erro ao enviar e-mail", "Ocorreu um erro ao enviar o e-mail de redefinição de senha. Por favor, tente novamente mais tarde.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -64,7 +76,7 @@ export default function Login() {
           value={password}
           onChangeText={password => setPassword(password)}
         />
-        <TouchableOpacity>
+        <TouchableOpacity style={styles.forgotPassword} onPress={handleForgotPassword}>
           <Text style={styles.forgotPassword}>Esqueci a Senha</Text>
         </TouchableOpacity>
         <Button title="Entrar" onPress={() => doLogin()} />
